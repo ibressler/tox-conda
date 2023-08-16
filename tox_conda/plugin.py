@@ -36,6 +36,11 @@ def get_python_packages(envconfig, action):
         return []
 
     # Try to use basepython
+    # delete possible list of envs, as in:
+    # [testenv]
+    # basepython =
+    #     {bootstrap,clean,build,check,report,docs,py}: {env:TOXPYTHON:python3}
+    envconfig.basepython = re.sub(r'^\{[^\}]*\}\s*:\s*', '', envconfig.basepython)
     match = re.match(r"(python|pypy)(\d)(?:\.(\d+))?(?:\.?(\d))?", envconfig.basepython)
     if match:
         groups = match.groups()
