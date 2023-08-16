@@ -62,7 +62,9 @@ def get_python_packages(envconfig, action):
     else:
         code = "import sys; print('{}.{}'.format(*sys.version_info[:2]))"
         result = action.popen([envconfig.basepython, "-c", code], report_fail=True, returnout=True)
-        version = result.decode("utf-8").strip()
+        if isinstance(result, bytes):
+            result = result.decode("utf-8")
+        version = result.strip()
 
     return ["python={}".format(version)]
 
